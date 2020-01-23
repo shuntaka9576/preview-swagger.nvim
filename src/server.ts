@@ -57,23 +57,34 @@ const main = async (): Promise<void> => {
         refreshContent: async bufnr => {
           const fileFullPath = await plugin.nvim.call('expand', '%:p');
           const bufferRows = await plugin.nvim.buffer.getLines();
-          const parseSwaggerConfigResponse = parseSwaggerConfig({
+          const parseSwaggerContentResponse = parseSwaggerConfig({
             bufferRows: bufferRows,
             fileFullPath: fileFullPath,
           });
 
-          if (!connections[bufnr]) return;
+          if (
+            !connections[bufnr] ||
+            !parseSwaggerContentResponse.swaggerContent
+          ) {
+            logger.debug(
+              `refresh faild for connections: ${connections[bufnr]}`,
+            );
+            logger.debug(
+              `refresh faild for swaggerContent: ${parseSwaggerContentResponse.swaggerContent}`,
+            );
+            return;
+          }
 
-          if (!parseSwaggerConfigResponse.isError) {
+          if (!parseSwaggerContentResponse.isError) {
             connections[bufnr].forEach(id => {
               logger.debug(`refresh_content:${id}`);
               io.to(id).emit(
                 'clear_error',
-                parseSwaggerConfigResponse.swaggerConfig,
+                parseSwaggerContentResponse.swaggerContent,
               );
               io.to(id).emit(
                 'refresh_content',
-                parseSwaggerConfigResponse.swaggerConfig,
+                parseSwaggerContentResponse.swaggerContent,
               );
             });
           } else {
@@ -81,7 +92,7 @@ const main = async (): Promise<void> => {
             connections[bufnr].forEach(id => {
               io.to(id).emit(
                 'parse_error',
-                parseSwaggerConfigResponse.errMessage,
+                parseSwaggerContentResponse.errMessage,
               );
             });
           }

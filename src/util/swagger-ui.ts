@@ -41,7 +41,7 @@ interface ConvertSwaggerJsonPrameter {
 
 export function parseSwaggerConfig(
   convertSwaggerJsonPrameter: ConvertSwaggerJsonPrameter,
-): ParseSwaggerConfigResponse {
+): ParseSwaggerContentResponse {
   try {
     const ext = path.extname(convertSwaggerJsonPrameter.fileFullPath);
     const buffer = convertSwaggerJsonPrameter.bufferRows.join('\n');
@@ -49,17 +49,20 @@ export function parseSwaggerConfig(
     if (ext === '.json') {
       return {
         isError: false,
-        swaggerConfig: JSON.parse(buffer),
+        swaggerContent: JSON.parse(buffer),
       };
     } else if (ext === '.yaml' || ext === '.yml') {
       const json = yaml.load(buffer);
       return {
         isError: false,
-        swaggerConfig: json,
+        swaggerContent: json,
       };
-    } else {
-      throw new SwaggerUiNotSupportedFileType(convertSwaggerJsonPrameter);
     }
+
+    return {
+      isError: false,
+      swaggerContent: null,
+    };
   } catch (e) {
     if (e instanceof yaml.YAMLException) {
       logger.debug(`yaml.YAMLException: ${e.toString()}`);
@@ -72,8 +75,8 @@ export function parseSwaggerConfig(
   }
 }
 
-interface ParseSwaggerConfigResponse {
+interface ParseSwaggerContentResponse {
   isError: boolean;
   errMessage?: string;
-  swaggerConfig?: object;
+  swaggerContent?: object;
 }
