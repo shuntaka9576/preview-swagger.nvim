@@ -62,6 +62,8 @@ const main = async (): Promise<void> => {
             fileFullPath: fileFullPath,
           });
 
+          if (!connections[bufnr]) return;
+
           if (!parseSwaggerConfigResponse.isError) {
             connections[bufnr].forEach(id => {
               logger.debug(`refresh_content:${id}`);
