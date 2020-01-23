@@ -3,5 +3,6 @@ function! pswag#autocmd#init() abort
     autocmd!
     autocmd BufWritePost <buffer> :call pswag#rpc#refresh_content()
     autocmd CursorHold,CursorHoldI,CursorMoved,CursorMovedI <buffer> :call pswag#rpc#refresh_content()
+    autocmd VimLeave * call pswag#rpc#stop_server()
   augroup END
 endfunction

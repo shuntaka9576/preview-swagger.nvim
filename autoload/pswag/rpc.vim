@@ -28,6 +28,19 @@ function! pswag#rpc#start_server()
         \ })
 endfunction
 
+function! pswag#rpc#stop_server()
+  if s:pswag_channel_id !=# -1
+     try
+       call jobstop(s:pswag_channel_id)
+     catch /.*/
+     endtry
+  endif
+  echo 's:pswag_channel_id' . s:pswag_channel_id
+  echo 'g:pswag_node_channel_id' . g:pswag_node_channel_id
+  let s:pswag_channel_id = -1
+  let g:pswag_node_channel_id = -1
+endfunction
+
 function! pswag#rpc#open_browser()
   if exists('g:pswag_node_channel_id') && g:pswag_node_channel_id !=# -1
     call rpcnotify(g:pswag_node_channel_id, 'open_browser', { 'bufnr': bufnr('%') })
