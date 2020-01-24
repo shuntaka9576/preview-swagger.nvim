@@ -6,7 +6,7 @@ import { getModuleLogger } from './util/logger';
 import { initPlugin } from './nvim';
 import { openBrowser } from './util/open-browser';
 import { routes } from './route';
-import { parseSwaggerConfig } from './util/swagger-ui';
+import { parseSwaggerContent } from './util/swagger-ui';
 
 const logger = getModuleLogger();
 
@@ -57,7 +57,7 @@ const main = async (): Promise<void> => {
         refreshContent: async bufnr => {
           const fileFullPath = await plugin.nvim.call('expand', '%:p');
           const bufferRows = await plugin.nvim.buffer.getLines();
-          const parseSwaggerContentResponse = parseSwaggerConfig({
+          const parseSwaggerContentResponse = parseSwaggerContent({
             bufferRows: bufferRows,
             fileFullPath: fileFullPath,
           });

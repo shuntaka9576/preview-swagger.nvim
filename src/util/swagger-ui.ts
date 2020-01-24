@@ -39,7 +39,7 @@ interface ConvertSwaggerJsonPrameter {
   fileFullPath: string;
 }
 
-export function parseSwaggerConfig(
+export function parseSwaggerContent(
   convertSwaggerJsonPrameter: ConvertSwaggerJsonPrameter,
 ): ParseSwaggerContentResponse {
   try {
