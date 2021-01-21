@@ -45,7 +45,7 @@
     "js-yaml": "^3.14.0",
     "log4js": "^6.3.0",
     "neovim": "^4.9.0",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.4.0"
   },
   "husky": {
     "hooks": {
